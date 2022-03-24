@@ -6,13 +6,13 @@ warnings.filterwarnings("ignore")
 def run_one_episode (env):
     env.reset()
     sum_reward = 0
-    for i in range(4):
+    for i in range(20):
         action = env.action_space.sample()
         print("What it is this action", action) # Taking a random action from the sample of actions
         # that is to say from the pool of actions
         state, reward, done, info = env.step(action)
         sum_reward += reward
-        # env.render()
+        env.render()
         if done:
             break
     return sum_reward
