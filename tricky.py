@@ -100,7 +100,7 @@ class JssEnv(gym.Env):
         assert self.machines > 1, 'We need at least 2 machines'
         assert self.instance_matrix is not None
         # allocate a job + one to wait
-        self.action_space = gym.spaces.Discrete(self.jobs)
+        self.action_space = gym.spaces.Discrete(self.jobs+1)
         # used for plotting
         self.colors = [
             tuple([random.random() for _ in range(3)]) for _ in range(self.machines)
@@ -244,7 +244,7 @@ class JssEnv(gym.Env):
     def step(self, action: int):
         reward = 0.0
         if action == self.jobs:
-            print("Is it coming here!!!, This is implemented to take care of no-op action")
+            print("This is implemented to take care of no-op action")
             self.nb_machine_legal = 0
             self.nb_legal_actions = 0
             for job in range(self.jobs):
@@ -264,8 +264,6 @@ class JssEnv(gym.Env):
             print("It must be going there then!!!")
             current_time_step_job = self.todo_time_step_job[action]
             machine_needed = self.needed_machine_jobs[action]
-            print(self.needed_machine_jobs)
-            print(self.instance_matrix[action])
             time_needed = self.instance_matrix[action][current_time_step_job][1]
             print("This is the time needed",time_needed)
             reward += time_needed
