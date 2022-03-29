@@ -11,22 +11,23 @@ def run_one_episode (env, verbose=False):
         action = env.action_space.sample()
         print('This is the action and the iteration',action, i)
 
-        # if verbose:
-        #     print("action:", action)
+        if verbose:
+            print("action:", action)
 
         state, reward, done, info = env.step(action)
         sum_reward += reward
 
-        if verbose:
-            env.render()
+        # if verbose:
+        #     env.render()
 
         if done:
             if verbose:
                 print("done @ step {}".format(i))
+                env.render()
             break
     if verbose:
         print("cumulative reward", sum_reward)
-
+    env.render()
     return sum_reward
 
 
