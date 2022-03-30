@@ -265,14 +265,12 @@ class JssEnv(gym.Env):
                 self.time_until_finish_current_op_jobs[action] = time_needed
                 self.state[action][1] = time_needed / self.max_time_op
                 to_add_time_step = self.current_time_step + time_needed
-
                 if to_add_time_step not in self.next_time_step:
                     index = bisect.bisect_left(self.next_time_step, to_add_time_step)
                     self.next_time_step.insert(index, to_add_time_step)
                     self.next_jobs.insert(index, action)
 
                 self.solution[action][current_time_step_job] = self.current_time_step
-                # print("This is solution", self.solution)
                 for job in range(self.jobs):
                     if self.needed_machine_jobs[job] == machine_needed and self.legal_actions[job]:
                         self.legal_actions[job] = False
@@ -286,7 +284,6 @@ class JssEnv(gym.Env):
                         self.illegal_actions[machine_needed][job] = False
                 # if we can't allocate new job in the current timestep, we pass to the next one
                 while self.nb_machine_legal == 0 and len(self.next_time_step) > 0:
-                #     print("Is it going here as of now?!")
                     reward -= self._increase_time_step()
                 # self._prioritization_non_final()
                 # self._check_no_op()
