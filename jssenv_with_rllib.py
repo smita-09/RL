@@ -8,7 +8,7 @@ def run_one_episode (env, verbose=False):
     sum_reward = 0
 
     for i in range(30):
-        action = env.action_space.sample()
+        action = env.action_space.sample() # There are 3 jobs so 3 actions that could be alocated aas of now  
         print('This is the action and the iteration',action, i)
 
         if verbose:
