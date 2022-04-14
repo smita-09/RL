@@ -6,9 +6,12 @@ warnings.filterwarnings("ignore")
 def run_one_episode (env, verbose=False):
     env.reset() 
     sum_reward = 0
-
-    for i in range(30):
-        action = env.action_space.sample() # There are 3 jobs so 3 actions that could be alocated aas of now  
+    
+    actions = [1, 2, 1, 0, 2, 0, 3, 2, 1, 0]
+    # actions = [1, 2, 1, 0, 2, 0, 3, 0, 1, 2]
+    # actions = [1, 2, 1, 0, 2, 0, 1, 0, 3, 2]
+    for i in range(10):
+        action = actions[i]
         print('This is the action and the iteration',action, i)
 
         if verbose:
@@ -17,14 +20,30 @@ def run_one_episode (env, verbose=False):
         state, reward, done, info = env.step(action)
         sum_reward += reward
 
-        # if verbose:
-        #     env.render()
-
         if done:
             if verbose:
                 print("done @ step {}".format(i))
                 env.render()
             break
+
+
+    # Letting the action picked randomly and not actually creating a pre defined list of actions to be picked.
+    # for i in range(30):
+    #     action = env.action_space.sample() # There are 3 jobs so 3 actions that could be alocated aas of now  
+    #     print('This is the action and the iteration',action, i)
+
+    #     if verbose:
+    #         print("action:", action)
+
+    #     state, reward, done, info = env.step(action)
+    #     sum_reward += reward
+
+    #     if done:
+    #         if verbose:
+    #             print("done @ step {}".format(i))
+    #             env.render()
+    #         break
+
     if verbose:
         print("cumulative reward", sum_reward)
     env.render()
@@ -50,3 +69,10 @@ def main ():
 
 if __name__ == "__main__":
     main()
+
+
+
+# 3 3 
+# 0 7 2 8 1 10 25
+# 1 6 0 4 2 12 30
+# 0 8 1 8 2 7 35
