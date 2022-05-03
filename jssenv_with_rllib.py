@@ -8,8 +8,8 @@ def run_one_episode (env, verbose=False):
     sum_reward = 0
     
     # actions = [1, 2, 1, 0, 2, 0, 3, 0, 1, 2] # 0.79, 1, 1.4, -1.0004, -2.199
-    # actions = [1, 2, 1, 0, 2, 0, 2, 1, 0] # 2.39, 2.4, 2.4, -1.20, -2.6000
-    actions = [1, 2, 1, 0, 2, 0, 1, 0, 3, 2] # Around 1, .., .., -1.40
+    actions = [1, 2, 1, 0, 2, 0, 2, 1, 0] # 2.39, 2.4, 2.4, -1.20, -2.6000
+    # actions = [1, 2, 1, 0, 2, 0, 1, 0, 3, 2] # Around 1, .., .., -1.40
     # Not taking the no action in account do not know why 
     for i in range(10):
         action = actions[i]
@@ -47,7 +47,7 @@ def run_one_episode (env, verbose=False):
 
     if verbose:
         print("cumulative reward", sum_reward)
-    # env.render()
+    env.render()
     return sum_reward
 
 
