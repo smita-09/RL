@@ -1,50 +1,36 @@
 from tracemalloc import start
-import gym
-import sys
 from  JSSEnv.envs.JssEnv import JssEnv
-import warnings
-warnings.filterwarnings("ignore")
-from ray.rllib.agents import with_common_config
-import os
-import ray 
 from ray.tune.registry import register_env
 import ray.rllib.agents.ppo as ppo
 from ray.rllib.agents import with_common_config
-import shutil
 from ray.rllib.models import ModelCatalog
 from models import *
 from ray.rllib.utils.framework import try_import_tf
-import time
+import gym
+import argparse
+import warnings
+import ray 
 import matplotlib.pyplot as plt # To plot the curve to see the progress
+warnings.filterwarnings("ignore")
 tf1, tf, tfv = try_import_tf()
 
-def main ():
-    # init directory in which to save checkpoints
-    chkpt_root = "tmp/exa/new"
-    shutil.rmtree(chkpt_root, ignore_errors=True, onerror=None)
+res = []
 
-    # init directory in which to log results
-    ray_results = "{}/ray_results/".format(os.getenv("HOME"))
-    shutil.rmtree(ray_results, ignore_errors=True, onerror=None)
-
-
-    # start Ray -- add `local_mode=True` here for debugging
+def main (count):
     ray.init(ignore_reinit_error=True)
 
     # register the custom environment
     select_env = "jss-v1"
-    #select_env = "fail-v1"
-    #register_env(select_env, lambda config: JssEnv())
-    #register_env(select_codenv, lambda config: Fail_v1())
 
+    
+    # register_env(select_env, lambda config: JssEnv(config))
 
     # configure the environment and create agent
     config = ppo.DEFAULT_CONFIG.copy()
-    ##################### 
+    #Adding env config 
     config['env_config'] = {
-        'instance_path' : '/home/smita/Documents/RL/JSSEnv/JSSEnv/envs/instances/ta01'
+        'instance_path' : '/home/smita/Documents/RL/JSSEnv/JSSEnv/envs/instances/sh' + str(count)
     }
-
     register_env(select_env, lambda config: JssEnv(config))
     config['metrics_smoothing_episodes'] = 2000
     config['gamma'] = 1.0
@@ -89,45 +75,24 @@ def main ():
     config.pop('entropy_start', None)
     config.pop('entropy_end', None)
 
-    agent = ppo.PPOTrainer(config, env=select_env)
-
-    status = "{:2d} reward {:6.2f}/{:6.2f}/{:6.2f} len {:4.2f} saved {}"
-    n_iter = 25
+    #register_env(select_env, lambda config: JssEnv(config))
+    agent = ppo.PPOTrainer(config, env=select_env) # This initializes the environment
 
     # train a policy with RLlib using PPO
-    reward_means = list()
-    for n in range(n_iter):
-        print('This it the iteration', n)
-        result = agent.train()
-        chkpt_file = agent.save(chkpt_root)
-        reward_means.append(result['episode_reward_mean'])
-        print(status.format(
-                n + 1,
-                result["episode_reward_min"],
-                result["episode_reward_mean"],
-                result["episode_reward_max"],
-                result["episode_len_mean"],
-                chkpt_file
-                ))
-    print(list(range(n_iter)), reward_means)
-    plt.plot(list(range(n_iter)), reward_means)
-    plt.title("Curve plotted using the given points")
-    plt.xlabel("X")
-    plt.ylabel("Y")
-    plt.show()
+    
     # examine the trained policy
     policy = agent.get_policy()
     model = policy.model
-    # print(model.base_model.summary())
-
 
     # apply the trained policy in a rollout
+    # Make sure to change this stuff before you make some changes
+    #chkpt_file = 'tmp/exa/checkpoint_000060/checkpoint-60' 
+    chkpt_file = 'tmp/exa/checkpoint_000056/checkpoint-56'
     agent.restore(chkpt_file)
-    dict = { 'instance_path':'/home/smita/Documents/RL/JSSEnv/JSSEnv/envs/instances/ta01'}
+    dict = { 'instance_path':'/home/smita/Documents/RL/JSSEnv/JSSEnv/envs/instances/sh' + str(count)}
     print('This is config file right here', dict['instance_path'])
     env = gym.make(select_env,env_config=dict) # This line was giving error when tried to pass the instance path in the arguments file
 
-    #env = gym.make(select_env)
 
     state = env.reset()
     sum_reward = 0
@@ -135,12 +100,13 @@ def main ():
 
     for step in range(n_step):
         action = agent.compute_action(state)
-        print('This is the action', action)
         state, reward, done, info = env.step(action)
         sum_reward += reward
 
         if done == 1:
             # report at the end of each episode
+            (violation, processing_time) = env.count_processing_time_and_violations()
+            res.append(tuple((violation, processing_time)))
             env.render()
             print("cumulative reward", sum_reward)
             state = env.reset()
@@ -149,4 +115,13 @@ def main ():
     
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('integers', metavar='N', type=int,
+                        help='an integer for the accumulator')
+
+    args = parser.parse_args() #ge the arguments that are mentioned as params
+    for i in range(1, args.integers):
+        print('This is i',i)
+        main(i)
+        print('After the whole thing is done, this is the list of the processing time and count of violations that are happening', res)
+    #main(1)
