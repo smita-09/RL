@@ -1,0 +1,83 @@
+\documentclass[a4paper,12pt,leqno]{report}
+\usepackage{inputenc,fontenc}
+\usepackage[a4paper,margin=3cm]{geometry}
+\usepackage[english,german]{babel}
+
+%%
+%% Pflichtangaben -bitte hier einsetzen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+\newcommand{\name}{Ihr Familienname}
+\newcommand{\vorname}{Ihr Vorname}
+\newcommand{\gebdatum}{Ihr Geburtsdatum}
+\newcommand{\ort}{Ihr Geburtsort}
+% für die Titelseite
+\newcommand{\betreuer}{Vollst\"{a}ndiger akad. Titel (z.B. Prof. Dr. rer. nat. habil.) Vorname Familienname Ihres Betreuers / Ihrer Betreuerin}
+% für die Erklärungsseite
+\newcommand{\betreuerkurz}{Kurzer akad. Titel (z.B. Prof. Dr.) Vorname Familienname Ihres Betreuers / Ihrer Betreuerin}
+\newcommand{\institut}{Institut Ihres Betreuers / Ihrer Betreuerin}
+\newcommand{\thema}{Titel der Arbeit}
+\newcommand{\datum}{tt.\ mm.\ jjjj} %Format tt.\ mm.\ jjjj
+\newcommand{\studiengang}{Mathematik oder Technomathematik oder Wirtschaftsmathematik}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+\selectlanguage{german}
+
+%% Titelseite
+\thispagestyle{empty}
+
+\begin{center}
+{\Large Technische Universit\"{a}t Dresden\  \ \textbullet\ \ Fakult\"{a}t Mathematik}
+
+\vfil
+
+{\bfseries\Huge\thema}
+
+\vfil
+{\LARGE
+Masterarbeit \\[\bigskipamount]
+zur Erlangung des Hochschulgrades\\[\bigskipamount]
+\bfseries{\itshape Master of Science \\ \textup{(}\studiengang\textup{)} \\
+\textup{(}M.Sc.\textup{)}}\\[\bigskipamount]
+}
+
+
+
+\vfil\vfil
+
+\vfil
+
+vorgelegt von
+\\[\bigskipamount]
+\textsc{\vorname\ } \MakeUppercase{\name}
+\\[\bigskipamount]
+(geboren am \gebdatum\ in \textsc{\ort})
+\\[\bigskipamount]
+Tag der Einreichung: \datum
+\\[\bigskipamount]
+\betreuer\ (\institut)
+\end{center}
+
+
+
+\cleardoublepage
+
+
+%%
+%% Erscheint auf letzter Seite
+%%
+\chapter*{Erkl\"{a}rung}
+\thispagestyle{empty}
+Hiermit erkl\"{a}re ich, dass ich die am \datum\ eingereichte Masterarbeit zum Thema
+\emph{\thema} unter Betreuung von \betreuerkurz\ selbstst\"{a}ndig erarbeitet,
+verfasst und Zitate kenntlich gemacht habe. Andere als die angegebenen Hilfsmittel
+wurden von mir nicht benutzt.
+
+\bigskip \bigskip \bigskip \bigskip \bigskip
+
+Dresden, \datum\ \hfill Unterschrift
+
+\normalsize
+\end{document}
